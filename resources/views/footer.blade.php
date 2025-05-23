@@ -1,0 +1,1 @@
+<p>Dokumen ini merupakan surat elektronik yang dapat diperiksa validitas-nya melalui situs SIP-BANGED DPUPR Kabupaten Tegal melalui alamat http://sip-banged.tegalkab.go.id</p>
