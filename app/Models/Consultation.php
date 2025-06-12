@@ -67,7 +67,7 @@ class Consultation extends Model
 
     public function sign()
     {   
-        return $this->HasMany(signend::class, 'head', 'head');
+        return $this->HasMany(Signed::class, 'head', 'head');
     }
 
     public function doc()

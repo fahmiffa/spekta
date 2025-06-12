@@ -3,6 +3,21 @@
     <link rel="stylesheet" href="{{ asset('assets/select/tom-select.bootstrap5.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/extensions/summernote/summernote-lite.css') }}">
     <style>
+        html[data-bs-theme=dark] .ts-wrapper,
+        html[data-bs-theme=dark] .ts-control,
+        html[data-bs-theme=dark] .ts-dropdown,
+        html[data-bs-theme=dark] .ts-control input {
+            color: #fff !important;
+        }
+
+        html[data-bs-theme=dark] .ts-dropdown .option {
+            color: #fff !important;
+        }
+
+        html[data-bs-theme=dark] .ts-dropdown .option.active {
+            color: #fff !important;
+        }
+
 
         .suggestions {
             border: 1px solid #ccc;
@@ -13,14 +28,15 @@
             width: 100%;
             z-index: 999;
         }
+
         .suggestion-item {
             padding: 8px;
             cursor: pointer;
         }
+
         .suggestion-item:hover {
             background-color: #f0f0f0;
         }
-
     </style>
 @endpush
 @section('main')
@@ -76,10 +92,11 @@
                                         <div class='small text-danger text-left'>{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6 col-sm-12 {{isset($doc) && $doc->survey ? '' : 'd-none'}} mb-3" id="survey">
+                                <div class="col-md-6 col-sm-12 {{ isset($doc) && $doc->survey ? null : 'd-none' }} mb-3"
+                                    id="survey">
                                     <label>Tanggal Survey :</label>
                                     <input type="date" name="survey" class="form-control"
-                                        value="{{ isset($doc) ? date('Y-m-d', strtotime($doc->survey)) : old('program') }}">
+                                        value="{{ isset($doc) ? date('Y-m-d', strtotime($doc->survey)) : old('survey') }}">
                                     @error('survey')
                                         <div class='small text-danger text-left'>{{ $message }}</div>
                                     @enderror
@@ -109,23 +126,25 @@
                                             @foreach ($extend as $item)
                                                 <div class="row mb-2">
                                                     <div class="col-8">
-                                                        <input type="hidden" name="plus[]"
-                                                            value="{{ $item }}">
-                                                        <span>{{$item}}</span>
+                                                        <input type="hidden" name="plus[]" value="{{ $item }}">
+                                                        <span>{{ $item }}</span>
                                                     </div>
-                                                    <button type="button" class="btn btn-danger btn-sm my-auto" style="width:fit-content;height:fit-content"  onclick="remove(this)"><i
+                                                    <button type="button" class="btn btn-danger btn-sm my-auto"
+                                                        style="width:fit-content;height:fit-content" onclick="remove(this)"><i
                                                             class="bi bi-trash"></i></button>
                                                 </div>
                                             @endforeach
                                             @endif
-                                    </div>
-                                    <div class="row my-3">
-                                        <div class="col-8">
-                                            <input type="text" id="plus" class="form-control" placeholder="peserta" autocomplete="off">
-                                            <div id="suggestions" class="suggestions" style="display: none;"></div>
                                         </div>
-                                        <button type="button" class="btn btn-primary btn-sm my-auto" style="width:fit-content;height:fit-content" onclick="extended()">Tambah</button>
-                                    </div>
+                                        <div class="row my-3">
+                                            <div class="col-8">
+                                                <input type="text" id="plus" class="form-control" placeholder="peserta"
+                                                    autocomplete="off">
+                                                <div id="suggestions" class="suggestions" style="display: none;"></div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-sm my-auto"
+                                                style="width:fit-content;height:fit-content" onclick="extended()">Tambah</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-3">
@@ -150,8 +169,8 @@
                                 <div class="form-group row mb-3">
                                     <div class="col-12 mb-3">
                                         <label>Pilih Pelapor</label>
-                                        <select class="form-control sel" id="pelapor" name="pelapor" placeholder="Pilih pelapor"
-                                            required>
+                                        <select class="form-control sel" id="pelapor" name="pelapor"
+                                            placeholder="Pilih pelapor" required>
                                             @isset($doc)
                                                 @foreach ($user as $row)
                                                     <option value="{{ $row->id }}" @selected($row->id == $doc->report)>
@@ -213,7 +232,7 @@
                                 $("#pelapor").empty();
                                 $.each(data.pelapor, function(i, val) {
                                     $("#pelapor").append('<option value="' + val.id + '">' + val.name +
-                                    '</option>');
+                                        '</option>');
                                 });
 
                             }
@@ -224,30 +243,30 @@
                     const suggestionBox = document.getElementById('suggestions');
 
                     input.addEventListener('input', () => {
-                    const value = input.value.toLowerCase();
-                    suggestionBox.innerHTML = '';
-                    if (value) {
-                        const filtered = pes.filter(item => item.toLowerCase().includes(value));
-                        filtered.forEach(item => {
-                        const div = document.createElement('div');
-                        div.classList.add('suggestion-item');
-                        div.textContent = item;
-                        div.addEventListener('click', () => {
-                            input.value = item;
+                        const value = input.value.toLowerCase();
+                        suggestionBox.innerHTML = '';
+                        if (value) {
+                            const filtered = pes.filter(item => item.toLowerCase().includes(value));
+                            filtered.forEach(item => {
+                                const div = document.createElement('div');
+                                div.classList.add('suggestion-item');
+                                div.textContent = item;
+                                div.addEventListener('click', () => {
+                                    input.value = item;
+                                    suggestionBox.style.display = 'none';
+                                });
+                                suggestionBox.appendChild(div);
+                            });
+                            suggestionBox.style.display = filtered.length ? 'block' : 'none';
+                        } else {
                             suggestionBox.style.display = 'none';
-                        });
-                        suggestionBox.appendChild(div);
-                        });
-                        suggestionBox.style.display = filtered.length ? 'block' : 'none';
-                    } else {
-                        suggestionBox.style.display = 'none';
-                    }
+                        }
                     });
 
                     document.addEventListener('click', (e) => {
-                    if (!e.target.closest('#plus')) {
-                        suggestionBox.style.display = 'none';
-                    }
+                        if (!e.target.closest('#plus')) {
+                            suggestionBox.style.display = 'none';
+                        }
                     });
 
                     var select = new TomSelect(".sel", {
@@ -270,10 +289,13 @@
 
                     function extended() {
                         var val = $('#plus').val();
-                        $("#extend").append('<div class="row mb-2">\
-                                    <div class="col-8"><input type="hidden" name="plus[]" value="' + val + '"><span>'+val+'</span></div>\
-                                    <button type="button" class="btn btn-danger btn-sm my-auto" style="width:fit-content;height:fit-content" onclick="remove(this)"><i class="bi bi-trash"></i></button>\
-                                    </div>');
+                        $("#extend").append(
+                            '<div class="row mb-2">\
+                                                                                    <div class="col-8"><input type="hidden" name="plus[]" value="' +
+                            val + '"><span>' +
+                            val + '</span></div>\
+                                                                                    <button type="button" class="btn btn-danger btn-sm my-auto" style="width:fit-content;height:fit-content" onclick="remove(this)"><i class="bi bi-trash"></i></button>\
+                                                                                    </div>');
                         $('#plus').val(null);
                     }
 

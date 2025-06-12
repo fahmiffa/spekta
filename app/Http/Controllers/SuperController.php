@@ -56,6 +56,15 @@ class SuperController extends Controller
         return back();
     }
 
+    public function hold(Request $request, $id)
+    {
+        $head = Head::where(DB::raw('md5(id)'), $id)->first();
+        $head->hold = $head->hold ? null : 1;
+        $head->save();
+        toastr()->success('Pending Berhasil', ['timeOut' => 5000]);
+        return back();
+    }
+
     public function inputBarp($id)
     {
         $meet = Meet::where(DB::raw('md5(head)'), $id)->first();

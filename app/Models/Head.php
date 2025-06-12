@@ -81,7 +81,10 @@ class Head extends Model
         $bak = $this->bak()->exists();
         $kons = $this->kons()->exists();
 
-        if ($attach && $tax && $this->do == 1) {
+        if($this->hold == 1)
+        {
+            $val = 'Ditunda';
+        } else if ($attach && $tax && $this->do == 1) {
             $val = 'Selesai';
         } else if ($this->do == 1) {
             $val = 'Pembuatan Lampiran';

@@ -45,7 +45,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('permohonan', [App\Http\Controllers\HomeController::class, 'req'])->name('req.index');   
         Route::post('permohonan-simbg/{id}', [App\Http\Controllers\HomeController::class, 'simbg'])->name('simbg');     
         Route::get('dokumen/{id}', [App\Http\Controllers\HomeController::class, 'doc'])->name('req.doc'); 
-        Route::get('monitoring', [App\Http\Controllers\HomeController::class, 'monitoring'])->name('monitoring');         
+        Route::get('monitoring', [App\Http\Controllers\HomeController::class, 'monitoring'])->name('monitoring');  
+        Route::get('pending', [App\Http\Controllers\HomeController::class, 'pending'])->name('pending');         
     });
 
     Route::group(['prefix'=>'master'],function() {   
@@ -95,6 +96,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('barp-input/{id}', [App\Http\Controllers\SuperController::class, 'inputBarp'])->name('super.barp'); 
         Route::post('barp-destroy/{id}', [App\Http\Controllers\SuperController::class, 'destroyBarp'])->name('super.barp.destroy'); 
 
+
+        // dokumen pending
+        Route::get('berita-acara-konsultasi', [App\Http\Controllers\PendingController::class, 'index'])->name('bak.pending'); 
+        Route::post('hold/{id}', [App\Http\Controllers\PendingController::class, 'hold'])->name('super.hold'); 
+
         Route::resource('verification', App\Http\Controllers\VerificationController::class);  
         Route::get('verifikasi', [App\Http\Controllers\VerificationController::class, 'index'])->name('verification.index'); 
         Route::get('verifikasi-step/{id}', [App\Http\Controllers\VerificationController::class, 'step'])->name('step.verifikasi');  
@@ -117,6 +123,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('next-news/{id}', [App\Http\Controllers\NewsController::class, 'next'])->name('next.news');    
         Route::post('bak-draft', [App\Http\Controllers\NewsController::class, 'draft'])->name('next.draft');    
         Route::post('back-news/{id}', [App\Http\Controllers\NewsController::class, 'back'])->name('back.news'); 
+
 
         Route::resource('meet', App\Http\Controllers\MeetController::class);  
         Route::get('barp', [App\Http\Controllers\MeetController::class, 'index'])->name('meet.index'); 

@@ -385,6 +385,15 @@ class HomeController extends Controller
         return view('monitoring', compact('da', 'data', 'ver'));
     }
 
+    public function Pending()
+    {
+        $val = Head::whereNotNull('hold')->latest();
+        $da = $val->get();
+        $data = "Dokumen ditunda";
+        $ver = true;
+        return view('pending', compact('da', 'data', 'ver'));
+    }
+
     public function doc($id)
     {
         $head = Head::where(DB::raw('md5(id)'), $id)->first();
@@ -762,9 +771,7 @@ class HomeController extends Controller
                 'par' => 'Terimakasih',
             ];
           $var =  Mail::to('faisol.ajifa@gmail.com')->send(new SipMail($mailData));
-          dd($var);
         } catch (\Exception $e) {
-            dd($e);
         }
     }
 }

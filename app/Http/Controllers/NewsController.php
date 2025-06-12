@@ -19,6 +19,7 @@ use App\Models\District;
 use App\Models\Village;
 use App\Rules\IsReg;
 use Illuminate\Support\Facades\Log;
+use App\Models\Consultation;
 
 class NewsController extends Controller
 {
@@ -33,14 +34,17 @@ class NewsController extends Controller
     {
         if(Auth::user()->roles->kode == 'SU')
         {
-            $val = News::latest();
+            $val = Consultation::has('sign')->latest();
         }
         else
         {
-            $val = Signed::has('kons')->where('user', Auth::user()->id)->latest();
-            $val = Signed::has('kons')->has('doc')->where('user', Auth::user()->id)->latest();
+            $val = Signed::has('kons')->wherehas('doc',function($q){
+                $q->whereNull('hold');
+            })->where('user', Auth::user()->id)->latest();
         }
+
         $da = $val->get();
+
 
         $data = "Berita Acara Konsultasi";
         return view('document.bak.home', compact('da', 'data'));

@@ -13,6 +13,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use PDF;
 use Illuminate\Support\Facades\Log;
+use App\Models\Consultation;
 
 class MeetController extends Controller
 {
@@ -27,11 +28,13 @@ class MeetController extends Controller
     {
         if(Auth::user()->roles->kode == 'SU')
         {
-            $val = Meet::latest();
+            $val = Consultation::has('sign')->latest();
         }
         else
         {
-            $val = Signed::has('doc')->where('user', Auth::user()->id)->latest();
+            $val = Signed::has('kons')->wherehas('doc',function($q){
+                $q->whereNull('hold');
+            })->where('user', Auth::user()->id)->latest();
         }
 
         $da = $val->get();

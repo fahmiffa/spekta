@@ -1,8 +1,5 @@
 @extends('layout.base')
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/select/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/select/select2-bootstrap-5-theme.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/select/select2-bootstrap-5-theme.rtl.min.css') }}">
     <style>
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
@@ -349,8 +346,6 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('assets/select/select2.min.js') }}"></script>
-
     <script type="text/javascript">
         const settings = {
             kompleksitas: 0.3,
@@ -798,5 +793,5 @@
         ];   
     </script>
 
-    <script src="{{ asset('assets/tax.js') }}"></script>
+    <script src="{{ asset('assets/tax.js??v=20250602') }}"></script>
 @endpush

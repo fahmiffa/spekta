@@ -12,6 +12,7 @@ use PDF;
 use QrCode;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Log;
+use Auth;
 
 class AttachController extends Controller
 {
@@ -24,10 +25,7 @@ class AttachController extends Controller
      */
     public function index(Request $request)
     {
-        // $val = Head::whereHas('barp', function ($q) {
-        //     $q->where('grant', 1);
-        // })->latest();
-        $val = Head::has('kons')->latest();
+        $val = Head::whereNull('hold')->has('kons')->latest();
         $da = $val->get();
 
         $data = "Lampiran";
@@ -79,8 +77,7 @@ class AttachController extends Controller
     public function tax()
     {
         $val = Setting::first();
-        // $val = Head::has('attach')->latest();
-        $val = Head::has('kons')->latest();
+        $val = Head::whereNull('hold')->has('kons')->latest();
         $da = $val->get();
 
         $data = "Perhitungan Retribusi";
@@ -112,7 +109,10 @@ class AttachController extends Controller
         $item->head = $head->id;
         $item->tanggal = $request->tanggal;
         $item->parameter = json_encode($input);
-        $item->status = 2;
+        if(!Auth::user()->ijin('master'))
+        {
+            $item->status = 2;
+        }    
         $item->save();
 
         toastr()->success('Input Data berhasil', ['timeOut' => 5000]);

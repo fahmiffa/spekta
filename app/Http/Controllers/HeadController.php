@@ -416,7 +416,9 @@ class HeadController extends Controller
         $user = User::where('status',1)->whereIn('role', Role::where('kode','KB')->pluck('id'))->get();
         
         $title = 'SPJ Rapat Pleno PBG';
-        $pemohon = PemohonHead::where('do',1)->get();
+        $pemohon = PemohonHead::WhereHas('bak',function($q){
+            $q->where('grant',1);
+        })->get();
 
         return view('spj.create',compact('pemohon','title','user'));
     }
@@ -468,7 +470,9 @@ class HeadController extends Controller
         $head       = $doc->sub->pluck('head')->toArray();
         $filter     = $doc->type == 'survey_pbg' ? ['TPT','TPA'] : ['KB'];
         $user       = User::select('id','name')->where('status',1)->whereIn('role', Role::whereIn('kode',$filter)->pluck('id'))->get();
-        $pemohon    = PemohonHead::where('do',1)->get();
+       $pemohon = PemohonHead::WhereHas('bak',function($q){
+            $q->where('grant',1);
+        })->get();
 
         $da = [];
         $sign = Signed::whereIn('head',$head);

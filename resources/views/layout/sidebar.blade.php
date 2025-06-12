@@ -53,6 +53,11 @@
         </li>
         @if(auth()->user()->roles->kode != 'SU')
             <li
+                class="sidebar-item {{ request()->routeIs('bak.pending') ? 'active' : null }}">
+                <a href="{{ route('bak.pending') }}" class="sidebar-link"><i class="bi bi-file-post"></i>
+                <span>BAK</span></a>
+            </li>
+            <li
                 class="sidebar-item {{ request()->routeIs('attach.index') ? 'active' : null }} {{ Request::segment(2) == 'attach-step' ? 'active' : null }}">
                 <a href="{{ route('attach.index') }}" class="sidebar-link"><i class="bi bi-files-alt"></i>
                     <span>Lampiran</span></a>
@@ -110,6 +115,12 @@
         <a href="{{ route('monitoring') }}" class="sidebar-link">
             <i class="bi bi-tv"></i>
             <span>Monitoring</span>
+        </a>
+    </li>
+       <li class="sidebar-item {{ request()->routeIs('pending') ? 'active' : null }}">
+        <a href="{{ route('pending') }}" class="sidebar-link">
+            <i class="bi bi-cone-striped"></i>
+            <span>Data Tunda</span>
         </a>
     </li>
 

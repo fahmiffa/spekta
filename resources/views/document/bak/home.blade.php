@@ -116,15 +116,26 @@
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
 
-                                                    <form onsubmit="return myConfirm('hapus');"
+                                                    <form onsubmit="return myConfirm('hapus data');"
                                                         action="{{ route('super.bak.destroy', md5($item->id)) }}"
                                                         method="POST">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-sm btn-danger ms-1"
+                                                        <button type="submit" class="btn btn-sm btn-danger mx-1"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Hapus Dokumen">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </form>
+                                                @endif
+                                                    
+                                                @if(in_array(auth()->user()->roles->kode,['SU','KB']))
+                                                    @php
+                                                        $conf = $item->doc->hold ? "proses permohonan" : "pending permohonan";
+                                                        $stts = $item->doc->hold ? "pending permohonan" : "proses permohonan";
+                                                        $btn = $item->doc->hold ? "btn-danger" : "btn-success";
+                                                    @endphp
+                                                    <button type="button" class="btn btn-sm {{$btn}} rounded-pill" data-bs-toggle="modal" data-bs-target="#drop{{$item->id}}">
+                                                       <i class="bi bi-stop-fill"></i>
+                                                   </button>
                                                 @endif
                                             </div>
                                         </td>
@@ -163,6 +174,37 @@
                         </div>
                     </div>
                 @endif
+                    <div class="modal fade" id="drop{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+                        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel{{ $item->id }}">Catatan Dokumen
+                                        ditunda</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                        @if($item->doc->hold_note)
+                                            <small><b>Catatan Sebelumnya :</b></small>
+                                            <p>{{$item->doc->hold_note}}</p>
+                                        @endif
+                                         <form action="{{ route('super.hold', md5($item->doc->id)) }}"
+                                            method="POST">
+                                            @csrf
+                                            <textarea class="form-control my-3" name="note" rows="2" required>{{old("note")}}</textarea>
+                                            <button type="submit" class="btn btn-sm btn-primary rounded-pill">
+                                                Simpan
+                                            </button>
+                                        </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             @endforeach
 
         </section>

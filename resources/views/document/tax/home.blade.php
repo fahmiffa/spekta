@@ -60,21 +60,30 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <div class="d-flex justify-content-center align-items-center">                                 
+                                            <div class="d-flex justify-content-center align-items-center">
                                                 @if ($item->bak)
-
-                                                    @if(in_array(auth()->user()->id, $item->sign->where('type','lead')->pluck('user')->toArray()))
+                                                    @if (in_array(auth()->user()->id, $item->sign->where('type', 'lead')->pluck('user')->toArray()))
                                                         <a class="btn btn-primary btn-sm me-1"
                                                             href="{{ route('step.tax', ['id' => md5($item->id)]) }}"
-                                                            data-toggle="tooltip" data-placement="top" title="Submit Dokumen">
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Submit Dokumen">
                                                             <i class="bi bi-send"></i>
                                                         </a>
                                                     @endif
-                                                    
-                                                    @if($item->tax)
+
+                                                    @if (auth()->user()->role == 1)
+                                                        <a class="btn btn-primary btn-sm me-1"
+                                                            href="{{ route('step.tax', ['id' => md5($item->id)]) }}"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="Submit Dokumen">
+                                                            <i class="bi bi-send"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    @if ($item->tax)
                                                         <a target="_blank"
                                                             href="{{ route('doc.tax', ['id' => md5($item->id)]) }}"
-                                                            class="btn btn-sm btn-danger"><i class="bi bi-file-pdf"></i></a>                                                
+                                                            class="btn btn-sm btn-danger"><i class="bi bi-file-pdf"></i></a>
                                                     @endif
                                                 @endif
 
