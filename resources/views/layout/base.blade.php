@@ -45,9 +45,9 @@
                                     class="bi bi-chevron-left"></i></a>
                         @endisset
                     @endisset
-                    <a class="navbar-brand ms-4 d-inline fw-bold ttd" href="{{ route('main') }}">
+                    <span class="navbar-brand ms-4 d-inline fw-bold ttd">
                         {{ $title }}
-                    </a>
+                    </span>
                 </div>
             </nav>
             @yield('main')
